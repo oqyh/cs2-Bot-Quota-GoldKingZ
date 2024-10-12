@@ -1,0 +1,4 @@
+{
+    "PrintChatToAll.LessPlayers": "{green}Gold KingZ {grey}| {grey}Server Has Less Players {lime}Adding {0} Bots",
+    "PrintChatToAll.KickBots": "{green}Gold KingZ {grey}| {grey}Server Has More Players {darkred}Kicking All Bots"
+}
