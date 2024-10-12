@@ -44,11 +44,11 @@
   //Add Bot By Mode? (normal,fill,match)
   "BotAddMode": "fill",
 
-  //Exec cfg When Bots Added (Note Need cfg To Be Inside csgo/cfg/
+  //Exec cfg When Bots Added (Note Need cfg To Be Inside csgo/cfg/) Note:Make It Empty "" To Disable
   //Example : Bot-Quota-GoldKingZ/WhenBotsAdded.cfg 
   "ExecConfigWhenBotsAdded": "",
 
-  //Exec cfg When Bots Kicked (Note Need cfg To Be Inside csgo/cfg/
+  //Exec cfg When Bots Kicked (Note Need cfg To Be Inside csgo/cfg/) Note:Make It Empty "" To Disable
   //Example : Bot-Quota-GoldKingZ/WhenBotsKicked.cfg 
   "ExecConfigWhenBotsKicked": "",
 
