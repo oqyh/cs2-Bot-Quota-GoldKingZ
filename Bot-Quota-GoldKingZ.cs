@@ -18,7 +18,7 @@ namespace Bot_Quota_GoldKingZ;
 public class BotQuotaGoldKingZ : BasePlugin
 {
     public override string ModuleName => "Bot Quota (Kick/Add Bots Depend How Many Players In The Server)";
-    public override string ModuleVersion => "1.0.0";
+    public override string ModuleVersion => "1.0.1";
     public override string ModuleAuthor => "Gold KingZ";
     public override string ModuleDescription => "https://github.com/oqyh";
 	internal static IStringLocalizer? Stringlocalizer;

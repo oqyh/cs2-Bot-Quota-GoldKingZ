@@ -184,7 +184,6 @@ public class Helper
     public static void CheckPlayersAndAddBots()
     {
         if(Configs.GetConfigData().DisablePluginOnWarmUp && IsWarmup())return;
-
         bool counteSpec = Configs.GetConfigData().IncludeCountingSpecPlayers? true : false;
         var PlayersCounts = GetPlayersCount(false,counteSpec);
 
@@ -202,12 +201,11 @@ public class Helper
         {
             botmode = "fill";
         }
-
-        if(Configs.GetConfigData().AddBotsWhenXOrLessPlayersInServer >= PlayersCounts && BotQuotaGoldKingZ.Instance.Onetime)
+        if(Configs.GetConfigData().AddBotsWhenXOrLessPlayersInServer >= PlayersCounts && !BotQuotaGoldKingZ.Instance.Onetime)
         {
             Server.ExecuteCommand($"bot_quota_mode {botmode}; bot_quota {Configs.GetConfigData().HowManyBotsShouldAdd}");
             AdvancedServerPrintToChatAll(Configs.Shared.StringLocalizer![$"PrintChatToAll.LessPlayers"], Configs.GetConfigData().HowManyBotsShouldAdd,PlayersCounts);
-            BotQuotaGoldKingZ.Instance.Onetime = false;
+            
             
             if(!string.IsNullOrEmpty(Configs.GetConfigData().ExecConfigWhenBotsAdded))
             {
@@ -226,11 +224,12 @@ public class Helper
                     DebugMessage(ex.Message);
                 }
             }
-        }else if(Configs.GetConfigData().AddBotsWhenXOrLessPlayersInServer < PlayersCounts && !BotQuotaGoldKingZ.Instance.Onetime)
+
+            BotQuotaGoldKingZ.Instance.Onetime = true;
+        }else if(Configs.GetConfigData().AddBotsWhenXOrLessPlayersInServer < PlayersCounts && BotQuotaGoldKingZ.Instance.Onetime)
         {
             Server.ExecuteCommand("bot_kick");
             AdvancedServerPrintToChatAll(Configs.Shared.StringLocalizer![$"PrintChatToAll.KickBots"], Configs.GetConfigData().HowManyBotsShouldAdd,PlayersCounts);
-            BotQuotaGoldKingZ.Instance.Onetime = true;
 
             if(!string.IsNullOrEmpty(Configs.GetConfigData().ExecConfigWhenBotsKicked))
             {
@@ -249,6 +248,8 @@ public class Helper
                     DebugMessage(ex.Message);
                 }
             }
+
+            BotQuotaGoldKingZ.Instance.Onetime = false;
         }
     }
 }
