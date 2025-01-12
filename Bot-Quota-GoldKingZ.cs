@@ -8,17 +8,14 @@ using Bot_Quota_GoldKingZ.Config;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 
 namespace Bot_Quota_GoldKingZ;
 
 
-[MinimumApiVersion(260)]
 public class BotQuotaGoldKingZ : BasePlugin
 {
     public override string ModuleName => "Bot Quota (Kick/Add Bots Depend How Many Players In The Server)";
-    public override string ModuleVersion => "1.0.1";
+    public override string ModuleVersion => "1.0.2";
     public override string ModuleAuthor => "Gold KingZ";
     public override string ModuleDescription => "https://github.com/oqyh";
 	internal static IStringLocalizer? Stringlocalizer;
@@ -47,6 +44,12 @@ public class BotQuotaGoldKingZ : BasePlugin
             Globals.BotCheckTimer = AddTimer(1.30f, Helper.CheckPlayersAndAddBots, TimerFlags.REPEAT | TimerFlags.STOP_ON_MAPCHANGE);
         }
     }
+
+    public override void Unload(bool hotReload)
+    {
+        Helper.ClearVariables();
+    }
+
     private void OnMapStart(string Map)
     {
         if(Configs.GetConfigData().CheckPlayersByTimer)
@@ -74,15 +77,8 @@ public class BotQuotaGoldKingZ : BasePlugin
         Helper.CheckPlayersAndAddBots();
         return HookResult.Continue;
     }
-
-
     private void OnMapEnd()
     {
         Helper.ClearVariables();
     }
-    public override void Unload(bool hotReload)
-    {
-        Helper.ClearVariables();
-    }
-    
 }

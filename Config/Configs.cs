@@ -83,6 +83,7 @@ namespace Bot_Quota_GoldKingZ.Config
 
         public class ConfigData
         {
+            public string MainConfig { get; set; }
             public bool DisablePluginOnWarmUp { get; set; }
             public bool CheckPlayersByTimer { get; set; }
             public int AddBotsWhenXOrLessPlayersInServer { get; set; }
@@ -91,13 +92,14 @@ namespace Bot_Quota_GoldKingZ.Config
             public string BotAddMode { get; set; }
             public string ExecConfigWhenBotsAdded { get; set; }
             public string ExecConfigWhenBotsKicked { get; set; }
-            public string empty { get; set; }
+            public string Debug { get; set; }
             public bool EnableDebug { get; set; }
-            public string empty2 { get; set; }
+            public string InfoConfig { get; set; }
             public string Information_For_You_Dont_Delete_it { get; set; }
             
             public ConfigData()
             {
+                MainConfig = "----------------------------[ ↓ Main Configs ↓ ]-------------------------------";
                 DisablePluginOnWarmUp = false;
                 CheckPlayersByTimer = true;
                 AddBotsWhenXOrLessPlayersInServer = 5;
@@ -106,9 +108,9 @@ namespace Bot_Quota_GoldKingZ.Config
                 BotAddMode = "fill";
                 ExecConfigWhenBotsAdded = "";
                 ExecConfigWhenBotsKicked = "";
-                empty = "----------------------------[ ↓ Debug ↓ ]----------------------------";
+                Debug = "----------------------------[ ↓ Utilities ↓ ]----------------------------";
                 EnableDebug = false;
-                empty2 = "----------------------------[ ↓ Info For All Configs Above ↓ ]----------------------------";
+                InfoConfig = "----------------------------[ ↓ Info For All Configs Above ↓ ]----------------------------";
                 Information_For_You_Dont_Delete_it = " Vist  [https://github.com/oqyh/cs2-Bot-Quota-GoldKingZ/tree/main?tab=readme-ov-file#-configuration-] To Understand All Above";
             }
         }
