@@ -6,14 +6,12 @@
 
 ### Kick / Add Bots Depend How Many Players In The Server
 
+![bot-quote](https://github.com/user-attachments/assets/c88a8ba3-dfaf-4265-9e22-1a4174370d8d)
 
 ## .:[ Dependencies ]:.
 [Metamod:Source (2.x)](https://www.sourcemm.net/downloads.php/?branch=master)
 
 [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp/releases)
-
-[Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json)
-
 
 
 ## .:[ Configuration ]:.
@@ -24,6 +22,8 @@
 
 ```json
 {
+  //----------------------------[ ↓ Main Configs ↓ ]-------------------------------
+
   //Disable Plugin On WarmUp?
   "DisablePluginOnWarmUp": false,
 
@@ -52,7 +52,7 @@
   //Example : Bot-Quota-GoldKingZ/WhenBotsKicked.cfg 
   "ExecConfigWhenBotsKicked": "",
 
-//----------------------------[ ↓ Debug ↓ ]----------------------------
+//----------------------------[ ↓ Utilities ↓ ]----------------------------
 
   //Enable Debug Will Print Server Console If You Face Any Issue
   "EnableDebug": false,
@@ -75,18 +75,20 @@
 	//        Other
 	//==========================
 	//{nextline} = Print On Next Line
-	//{0} = How Many Bots Added
-	//{1} = Players Counts
 	//==========================
-	
-    "PrintChatToAll.LessPlayers": "{green}Gold KingZ {grey}| {grey}Server Has Less Players {lime}Adding {0} Bots",
-    "PrintChatToAll.KickBots": "{green}Gold KingZ {grey}| {grey}Server Has More Players {darkred}Kicking All Bots"
+
+	"PrintChatToAll.LessPlayers": "{green}Gold KingZ {grey}| {grey}Server Has Less Players {lime}Adding {0} Bots",
+	"PrintChatToAll.KickBots": "{green}Gold KingZ {grey}| {grey}Server Has More Players {darkred}Kicking All Bots"
 }
 ```
 
 
 ## .:[ Change Log ]:.
 ```
+(1.0.2)
+-Fix Bug Counting
+-Added Some Debugs Info
+
 (1.0.1)
 -Fix Bug
 
