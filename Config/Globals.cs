@@ -5,5 +5,6 @@ namespace Bot_Quota_GoldKingZ;
 
 public class Globals
 {
-    public static CounterStrikeSharp.API.Modules.Timers.Timer? BotCheckTimer;
+    public CounterStrikeSharp.API.Modules.Timers.Timer? BotCheckTimer;
+    public bool onetime = false;
 }

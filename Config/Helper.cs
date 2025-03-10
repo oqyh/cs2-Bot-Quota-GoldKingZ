@@ -1,15 +1,9 @@
 using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Utils;
 using System.Text.RegularExpressions;
-using System.Text.Json;
-using System.Text.Encodings.Web;
-using CounterStrikeSharp.API.Modules.Memory;
-using CounterStrikeSharp.API.Modules.Cvars;
-using System.Runtime.InteropServices;
 using Bot_Quota_GoldKingZ.Config;
-using System.Diagnostics;
+using CounterStrikeSharp.API.Core.Translations;
 
 namespace Bot_Quota_GoldKingZ;
 
@@ -28,35 +22,18 @@ public class Helper
             string[] parts = Regex.Split(message, "{nextline}", RegexOptions.IgnoreCase);
             foreach (string part in parts)
             {
-                string messages = part.Trim();
-                player.PrintToChat(" " + messages);
+                string trimmedPart = part.Trim();
+                trimmedPart = trimmedPart.ReplaceColorTags();
+                if (!string.IsNullOrEmpty(trimmedPart))
+                {
+                    player.PrintToChat(" " + trimmedPart);
+                }
             }
         }
         else
         {
+            message = message.ReplaceColorTags();
             player.PrintToChat(message);
-        }
-    }
-    public static void AdvancedServerPrintToChatAll(string message, params object[] args)
-    {
-        if (string.IsNullOrEmpty(message)) return;
-
-        for (int i = 0; i < args.Length; i++)
-        {
-            message = message.Replace($"{{{i}}}", args[i].ToString());
-        }
-        if (Regex.IsMatch(message, "{nextline}", RegexOptions.IgnoreCase))
-        {
-            string[] parts = Regex.Split(message, "{nextline}", RegexOptions.IgnoreCase);
-            foreach (string part in parts)
-            {
-                string messages = part.Trim();
-                Server.PrintToChatAll(" " + messages);
-            }
-        }
-        else
-        {
-            Server.PrintToChatAll(message);
         }
     }
     public static void AdvancedPlayerPrintToConsole(CCSPlayerController player, string message, params object[] args)
@@ -72,48 +49,56 @@ public class Helper
             string[] parts = Regex.Split(message, "{nextline}", RegexOptions.IgnoreCase);
             foreach (string part in parts)
             {
-                string messages = part.Trim();
-                player.PrintToConsole(" " + messages);
+                string trimmedPart = part.Trim();
+                trimmedPart = trimmedPart.ReplaceColorTags();
+                if (!string.IsNullOrEmpty(trimmedPart))
+                {
+                    player.PrintToConsole(" " + trimmedPart);
+                }
             }
         }
         else
         {
+            message = message.ReplaceColorTags();
             player.PrintToConsole(message);
         }
     }
-
-    public static bool IsPlayerInGroupPermission(CCSPlayerController player, string groups)
+    public static void AdvancedServerPrintToChatAll(string message, params object[] args)
     {
-        var excludedGroups = groups.Split(',');
-        foreach (var group in excludedGroups)
+        if (string.IsNullOrEmpty(message)) return;
+
+        for (int i = 0; i < args.Length; i++)
         {
-            switch (group[0])
+            message = message.Replace($"{{{i}}}", args[i].ToString());
+        }
+        if (Regex.IsMatch(message, "{nextline}", RegexOptions.IgnoreCase))
+        {
+            string[] parts = Regex.Split(message, "{nextline}", RegexOptions.IgnoreCase);
+            foreach (string part in parts)
             {
-                case '#':
-                    if (AdminManager.PlayerInGroup(player, group))
-                        return true;
-                    break;
-
-                case '@':
-                    if (AdminManager.PlayerHasPermissions(player, group))
-                        return true;
-                    break;
-
-                default:
-                    return false;
+                string trimmedPart = part.Trim();
+                trimmedPart = trimmedPart.ReplaceColorTags();
+                if (!string.IsNullOrEmpty(trimmedPart))
+                {
+                    Server.PrintToChatAll(" " + trimmedPart);
+                }
             }
         }
-        return false;
+        else
+        {
+            message = message.ReplaceColorTags();
+            Server.PrintToChatAll(message);
+        }
     }
-    public static List<CCSPlayerController> GetPlayersController(bool IncludeBots = false, bool IncludeSPEC = true, bool IncludeCT = true, bool IncludeT = true)
+    public static List<CCSPlayerController> GetPlayersController(bool IncludeBots = false, bool IncludeSPEC = true, bool IncludeCT = true, bool IncludeT = true) 
     {
         var playerList = Utilities
             .FindAllEntitiesByDesignerName<CCSPlayerController>("cs_player_controller")
-            .Where(p => p != null && p.IsValid &&
-                        (IncludeBots || (!p.IsBot && !p.IsHLTV)) &&
-                        p.Connected == PlayerConnectedState.PlayerConnected &&
-                        ((IncludeCT && p.TeamNum == (byte)CsTeam.CounterTerrorist) ||
-                        (IncludeT && p.TeamNum == (byte)CsTeam.Terrorist) ||
+            .Where(p => p != null && p.IsValid && 
+                        (IncludeBots || (!p.IsBot && !p.IsHLTV)) && 
+                        p.Connected == PlayerConnectedState.PlayerConnected && 
+                        ((IncludeCT && p.TeamNum == (byte)CsTeam.CounterTerrorist) || 
+                        (IncludeT && p.TeamNum == (byte)CsTeam.Terrorist) || 
                         (IncludeSPEC && p.TeamNum == (byte)CsTeam.Spectator)))
             .ToList();
 
@@ -121,43 +106,23 @@ public class Helper
     }
     public static int GetPlayersCount(bool IncludeBots = false, bool IncludeSPEC = true, bool IncludeCT = true, bool IncludeT = true)
     {
-        return Utilities.GetPlayers().Count(p =>
-            p != null &&
-            p.IsValid &&
-            p.Connected == PlayerConnectedState.PlayerConnected &&
-            (IncludeBots || (!p.IsBot && !p.IsHLTV)) &&
-            ((IncludeCT && p.TeamNum == (byte)CsTeam.CounterTerrorist) ||
-            (IncludeT && p.TeamNum == (byte)CsTeam.Terrorist) ||
+        return Utilities.GetPlayers().Count(p => 
+            p != null && 
+            p.IsValid && 
+            p.Connected == PlayerConnectedState.PlayerConnected && 
+            (IncludeBots || (!p.IsBot && !p.IsHLTV)) && 
+            ((IncludeCT && p.TeamNum == (byte)CsTeam.CounterTerrorist) || 
+            (IncludeT && p.TeamNum == (byte)CsTeam.Terrorist) || 
             (IncludeSPEC && p.TeamNum == (byte)CsTeam.Spectator))
         );
     }
 
     public static void ClearVariables()
     {
-        BotQuotaGoldKingZ.Instance.Onetime = false;
-        Globals.BotCheckTimer?.Kill();
-        Globals.BotCheckTimer = null;
-    }
-
-    public static string ReplaceMessages(string Message, string date, string time, string PlayerName, string SteamId, string ipAddress, string reason)
-    {
-        var replacedMessage = Message
-                                    .Replace("{TIME}", time)
-                                    .Replace("{DATE}", date)
-                                    .Replace("{PLAYERNAME}", PlayerName.ToString())
-                                    .Replace("{STEAMID}", SteamId.ToString())
-                                    .Replace("{IP}", ipAddress.ToString())
-                                    .Replace("{REASON}", reason);
-        return replacedMessage;
-    }
-    public static string RemoveLeadingSpaces(string content)
-    {
-        string[] lines = content.Split('\n');
-        for (int i = 0; i < lines.Length; i++)
-        {
-            lines[i] = lines[i].TrimStart();
-        }
-        return string.Join("\n", lines);
+        var g_Main = BotQuotaGoldKingZ.Instance.g_Main;
+        g_Main.BotCheckTimer?.Kill();
+        g_Main.BotCheckTimer = null;
+        g_Main.onetime = false;
     }
     public static CCSGameRules? GetGameRules()
     {
@@ -175,93 +140,83 @@ public class Helper
     {
         return GetGameRules()?.WarmupPeriod ?? false;
     }
-    public static void DebugMessage(string message)
+
+    public static void DebugMessage(string message, bool prefix = true)
     {
         if (!Configs.GetConfigData().EnableDebug) return;
         Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.WriteLine("[Debug Bot Quota]: " + message);
+        string Prefix = "[Bot Quota]: ";
+        Console.WriteLine(prefix?Prefix:"" + message);
         Console.ResetColor();
     }
 
     public static void CheckPlayersAndAddBots()
     {
-        if (Configs.GetConfigData().DisablePluginOnWarmUp && IsWarmup()) return;
-        bool counteSpec = Configs.GetConfigData().IncludeCountingSpecPlayers ? true : false;
-        var PlayersCounts = GetPlayersCount(false, counteSpec);
+        if (Configs.GetConfigData().DisablePluginOnWarmUp && IsWarmup()) 
+        {
+            DebugMessage("DisablePluginOnWarmUp is Enabled");
+            DebugMessage("WarmUp Is Active Result Plugin Will Disable On WarmUp");
+            return;
+        }
+        
+        var PlayersCounts = GetPlayersCount(false, Configs.GetConfigData().IncludeCountingSpecPlayers);
+        var Bots_InGame = Utilities.GetPlayers().Count(p => p != null && p.IsValid && p.IsBot && !p.IsHLTV && (p.TeamNum == (byte)CsTeam.Terrorist || p.TeamNum == (byte)CsTeam.CounterTerrorist));
 
-        string botmode = "";
-        if (Configs.GetConfigData().BotAddMode.Contains("normal", StringComparison.OrdinalIgnoreCase))
+        string botmode = Configs.GetConfigData().BotAddMode.ToLower() switch
         {
-            botmode = "normal";
-        }
-        else if (Configs.GetConfigData().BotAddMode.Contains("fill", StringComparison.OrdinalIgnoreCase))
+            "normal" => "normal",
+            "fill" => "fill",
+            "match" => "match",
+            _ => "fill"
+        };
+
+
+        if (Configs.GetConfigData().AddBotsWhenXOrLessPlayersInServer > PlayersCounts)
         {
-            botmode = "fill";
-        }
-        else if (Configs.GetConfigData().BotAddMode.Contains("match", StringComparison.OrdinalIgnoreCase))
-        {
-            botmode = "match";
+            if(Bots_InGame == 0 && Configs.GetConfigData().HowManyBotsShouldAdd > 0)
+            {
+                ExecuteConfig(Configs.GetConfigData().ExecConfigWhenBotsAdded);
+                Server.ExecuteCommand($"bot_quota_mode {botmode}; bot_quota {Configs.GetConfigData().HowManyBotsShouldAdd}");
+                if(BotQuotaGoldKingZ.Instance.g_Main.onetime == false)
+                {
+                    AdvancedServerPrintToChatAll(Configs.Shared.StringLocalizer![$"PrintChatToAll.LessPlayers"], Configs.GetConfigData().HowManyBotsShouldAdd, PlayersCounts);
+                }
+                BotQuotaGoldKingZ.Instance.g_Main.onetime = true;
+            }
         }
         else
         {
-            botmode = "fill";
+            Server.ExecuteCommand("bot_kick");
+            ExecuteConfig(Configs.GetConfigData().ExecConfigWhenBotsKicked);
+            if(BotQuotaGoldKingZ.Instance.g_Main.onetime == true)
+            {
+                AdvancedServerPrintToChatAll(Configs.Shared.StringLocalizer![$"PrintChatToAll.KickBots"], Configs.GetConfigData().HowManyBotsShouldAdd, PlayersCounts);
+            }
+            BotQuotaGoldKingZ.Instance.g_Main.onetime = false;
         }
         
-        DebugMessage($"AddBotsWhenXOrLessPlayersInServer: {Configs.GetConfigData().AddBotsWhenXOrLessPlayersInServer}");
-        DebugMessage($"Players: {PlayersCounts}");
+    }
 
-        if (Configs.GetConfigData().AddBotsWhenXOrLessPlayersInServer > PlayersCounts && !BotQuotaGoldKingZ.Instance.Onetime)
+    private static void ExecuteConfig(string configName)
+    {
+        if (!string.IsNullOrEmpty(configName))
         {
-            Server.ExecuteCommand($"bot_quota_mode {botmode}; bot_quota {Configs.GetConfigData().HowManyBotsShouldAdd}");
-            AdvancedServerPrintToChatAll(Configs.Shared.StringLocalizer![$"PrintChatToAll.LessPlayers"], Configs.GetConfigData().HowManyBotsShouldAdd, PlayersCounts);
-
-
-            if (!string.IsNullOrEmpty(Configs.GetConfigData().ExecConfigWhenBotsAdded))
+            string configPath = Path.Combine(Server.GameDirectory, $"csgo/cfg/{configName}");
+            try
             {
-                string FileWhenBotsAdded = Path.Combine(Server.GameDirectory, $"csgo/cfg/{Configs.GetConfigData().ExecConfigWhenBotsAdded}");
-                try
+                if (File.Exists(configPath))
                 {
-                    if (!File.Exists(FileWhenBotsAdded))
-                    {
-                        DebugMessage($"File not found: {FileWhenBotsAdded}");
-                        return;
-                    }
-                    Server.ExecuteCommand($"exec {Configs.GetConfigData().ExecConfigWhenBotsAdded}");
-
+                    Server.ExecuteCommand($"execifexists {configName}");
                 }
-                catch (Exception ex)
+                else
                 {
-                    DebugMessage(ex.Message);
+                    DebugMessage($"File not found: {configPath}");
                 }
             }
-
-            BotQuotaGoldKingZ.Instance.Onetime = true;
-        }
-        else if (Configs.GetConfigData().AddBotsWhenXOrLessPlayersInServer <= PlayersCounts && BotQuotaGoldKingZ.Instance.Onetime)
-        {
-            Server.ExecuteCommand("bot_kick");
-            AdvancedServerPrintToChatAll(Configs.Shared.StringLocalizer![$"PrintChatToAll.KickBots"], Configs.GetConfigData().HowManyBotsShouldAdd, PlayersCounts);
-
-            if (!string.IsNullOrEmpty(Configs.GetConfigData().ExecConfigWhenBotsKicked))
+            catch (Exception ex)
             {
-                string FileWhenBotsKicked = Path.Combine(Server.GameDirectory, $"csgo/cfg/{Configs.GetConfigData().ExecConfigWhenBotsKicked}");
-                try
-                {
-                    if (!File.Exists(FileWhenBotsKicked))
-                    {
-                        DebugMessage($"File not found: {FileWhenBotsKicked}");
-                        return;
-                    }
-                    Server.ExecuteCommand($"exec {Configs.GetConfigData().ExecConfigWhenBotsKicked}");
-
-                }
-                catch (Exception ex)
-                {
-                    DebugMessage(ex.Message);
-                }
+                DebugMessage(ex.Message);
             }
-
-            BotQuotaGoldKingZ.Instance.Onetime = false;
         }
     }
 }
