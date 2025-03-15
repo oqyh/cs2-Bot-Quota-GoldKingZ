@@ -175,10 +175,10 @@ public class Helper
         {
             if(Bots_InGame == 0 && Configs.GetConfigData().HowManyBotsShouldAdd > 0)
             {
-                ExecuteConfig(Configs.GetConfigData().ExecConfigWhenBotsAdded);
                 Server.ExecuteCommand($"bot_quota_mode {botmode}; bot_quota {Configs.GetConfigData().HowManyBotsShouldAdd}");
                 if(BotQuotaGoldKingZ.Instance.g_Main.onetime == false)
                 {
+                    ExecuteConfig(Configs.GetConfigData().ExecConfigWhenBotsAdded);
                     AdvancedServerPrintToChatAll(Configs.Shared.StringLocalizer![$"PrintChatToAll.LessPlayers"], Configs.GetConfigData().HowManyBotsShouldAdd, PlayersCounts);
                 }
                 BotQuotaGoldKingZ.Instance.g_Main.onetime = true;
@@ -187,9 +187,9 @@ public class Helper
         else
         {
             Server.ExecuteCommand("bot_kick");
-            ExecuteConfig(Configs.GetConfigData().ExecConfigWhenBotsKicked);
             if(BotQuotaGoldKingZ.Instance.g_Main.onetime == true)
             {
+                ExecuteConfig(Configs.GetConfigData().ExecConfigWhenBotsKicked);
                 AdvancedServerPrintToChatAll(Configs.Shared.StringLocalizer![$"PrintChatToAll.KickBots"], Configs.GetConfigData().HowManyBotsShouldAdd, PlayersCounts);
             }
             BotQuotaGoldKingZ.Instance.g_Main.onetime = false;
