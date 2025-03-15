@@ -2,7 +2,7 @@
 
 <a href="https://discord.com/invite/U7AuQhu"><img src="https://discord.com/api/guilds/651838917687115806/widget.png?style=banner2"></a>
 
-# [CS2] Bot-Quota-GoldKingZ (1.0.3)
+# [CS2] Bot-Quota-GoldKingZ (1.0.4)
 
 Kick / Add Bots Depend How Many Players In The Server
 
@@ -85,6 +85,9 @@ Kick / Add Bots Depend How Many Players In The Server
 
 <details>
 <summary>📋 View Version History (Click to expand 🔽)</summary>
+
+### [1.0.4]
+- Fix Cfg Flood
 
 ### [1.0.3]
 - Fix Some Bugs
